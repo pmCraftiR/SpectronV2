@@ -1,3 +1,28 @@
+> **This is a fork of [TheWindows/SpectronV2](https://github.com/TheWindows/SpectronV2) updated for PocketMine-MP 5.44+ and pmmp-ng (nethergamesmc) fork.**
+
+---
+
+## 🛠️ | Compatibility Fixes (PocketMine-MP 5.44+ / pmmp-ng)
+
+### Bug Fixed
+> `Error: Cannot access uninitialized non-nullable property StartGamePacket::$serverTelemetryData by reference`
+
+This crash happened when a fake player connected — `addToSendBuffer()` intercepted every outgoing packet and tried to decode it, including `StartGamePacket`. In the nethergamesmc bedrock-protocol, the decode path passes `$serverTelemetryData` by reference before it's initialized, causing a fatal PHP 8.1+ error.
+
+### Files Changed
+
+| File | What changed |
+|---|---|
+| `Loader.php` | Handle new `ClientData` namespace (`...login\clientdata\ClientData`) in 5.44+ with `class_alias` fallback |
+| `TryChangeMovementInternalspectronBehaviour.php` | Replace removed armour classes (`Helmet`, `Chestplate`, `Leggings`, `Boots`) with `ArmorItem::getArmorSlot()`; replace `Sign` with `BaseSign` |
+| `util/PacketUtils.php` *(new)* | Encode/decode helper using `pmmp\encoding\ByteBufferWriter/Reader` with `PacketSerializer` fallback for older builds |
+| `network/listener/spectronSpecificPacketListener.php` | Added `hasListener(string $packetClass): bool` for efficient per-packet listener checking |
+| `network/spectronNetworkSession.php` | Skip decoding when no listener is interested; wrap all packet decode in `try/catch(\Throwable)` to prevent server crashes from undecodable clientbound packets |
+
+Tested on **PocketMine-MP 5.44.2+dev** with **pmmp-ng (nethergamesmc)** fork.
+
+---
+
 # ❔ | How This Plugin Work?
 
 > Make Sure You Have Permissions Or Op On The Server

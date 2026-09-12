@@ -1,7 +1,9 @@
 name: spectronV2
 main: TheWindows\spectron\Loader
 api: 5.0.0
-author: TheWindows
+authors:
+  - TheWindows
+  - pmCraftiR
 description: "ReCreated By TheWindows"
 version: 2.0.1
 
